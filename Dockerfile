@@ -42,6 +42,10 @@ USER jovyan
 # https://github.com/jupyterhub/jupyter-server-proxy/pull/151
 RUN /opt/conda/bin/pip install https://github.com/jupyterhub/jupyter-server-proxy/archive/0e67e1afd0bab1342443f13bd147a2f8c682e9e0.zip
 RUN conda install -y -q -c manics websockify=0.9.0
+RUN conda update --all
+RUN conda update -n base conda
+RUN conda upgrade --all
+
 
 ADD jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py
 
@@ -51,31 +55,32 @@ ADD jupyter_notebook_config.py /home/jovyan/.jupyter/jupyter_notebook_config.py
 USER root
 RUN apt-get update -y -q && \
     apt-get install -y -q \
-    firefox \
+    #firefox \
     less \
-    openjdk-8-jre \
+    #openjdk-8-jre \
     unzip
 # default-jre is java 11 which is incompatible with Fiji
 
 USER jovyan
-RUN wget -q https://downloads.imagej.net/fiji/latest/fiji-nojre.zip && \
-    unzip -q fiji-nojre.zip && \
-    echo TODO: rm fiji-nojre.zip
-RUN wget -q https://github.com/ome/omero-insight/releases/download/v5.5.6/OMERO.imagej-5.5.6.zip && \
-    cd Fiji.app/plugins && \
-    unzip -q ../../OMERO.imagej-5.5.6.zip && \
-    echo TODO: rm OMERO.imagej-5.5.6.zip
+#RUN wget -q https://downloads.imagej.net/fiji/latest/fiji-nojre.zip && \
+    #unzip -q fiji-nojre.zip && \
+    #echo TODO: rm fiji-nojre.zip
+#RUN wget -q https://github.com/ome/omero-insight/releases/download/v5.5.6/OMERO.imagej-5.5.6.zip && \
+    #cd Fiji.app/plugins && \
+    #unzip -q ../../OMERO.imagej-5.5.6.zip && \
+    #echo TODO: rm OMERO.imagej-5.5.6.zip
 
-RUN wget -q https://github.com/ome/omero-insight/releases/download/v5.5.6/OMERO.insight-5.5.6.zip && \
-    unzip -q OMERO.insight-5.5.6.zip && \
-    echo TODO: rm OMERO.insight-5.5.6.zip
+#RUN wget -q https://github.com/ome/omero-insight/releases/download/v5.5.6/OMERO.insight-5.5.6.zip && \
+    #unzip -q OMERO.insight-5.5.6.zip && \
+    #echo TODO: rm OMERO.insight-5.5.6.zip
 
-RUN mkdir .java && \
-    cd OMERO.insight-5.5.6 && \
-    wget -q https://www.openmicroscopy.org/img/logos/omero-logomark.svg
+#RUN mkdir .java && \
+    #cd OMERO.insight-5.5.6 && \
+    #wget -q https://www.openmicroscopy.org/img/logos/omero-logomark.svg
+
 # https://developer.gnome.org/desktop-entry-spec/
 #COPY --chown=${NB_UID}:${NB_GID} *.desktop /home/jovyan/Desktop/
-COPY --chown=1000:100 *.desktop /home/jovyan/Desktop/
+#COPY --chown=1000:100 *.desktop /home/jovyan/Desktop/
 
 WORKDIR ${HOME}
 
@@ -94,7 +99,9 @@ RUN conda install --freeze-installed -y -q -c conda-forge \
     pyopengl \
     pyside2 \
     wrapt \
-    numpydoc
+    numpydoc \
+    dask-image \
+    trackpy
 # Already installed:
     # ipykernel
     # numpy
